@@ -20,7 +20,7 @@ jobs:
       platforms: linux/amd64
 
       # Backend specific configuration
-      dockerfile: docker/Dockerfile.backend
+      file: docker/Dockerfile.backend
       image-names: |
         ghcr.io/${{ github.repository }}/backend
 
@@ -47,7 +47,7 @@ jobs:
       platforms: linux/amd64
 
       # Frontend specific configuration
-      dockerfile: docker/Dockerfile.frontend
+      file: docker/Dockerfile.frontend
       image-names: |
         ghcr.io/${{ github.repository }}/frontend
 
