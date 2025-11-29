@@ -1,9 +1,7 @@
 services:
   # Backend service (API and core logic)
   nofx:
-    build:
-      context: .
-      dockerfile: ./docker/Dockerfile.backend
+    image: ghcr.io/deroino/nofx/backend:latest
     container_name: nofx-trading
     restart: unless-stopped
     stop_grace_period: 30s  # 允许应用有 30 秒时间优雅关闭
@@ -33,9 +31,7 @@ services:
 
   # Frontend service (static serving and proxy)
   nofx-frontend:
-    build:
-      context: .
-      dockerfile: ./docker/Dockerfile.frontend
+    image: ghcr.io/deroino/nofx/frontend:latest
     container_name: nofx-frontend
     restart: unless-stopped
     ports:

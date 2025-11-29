@@ -1,0 +1,64 @@
+name: NOFX Docker Build
+
+on:
+  push:
+    branches: [ main, dev ]
+    # Removed tags trigger - Docker builds should not run on version tags
+    # Version tags are exclusively for desktop application releases
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  docker-build-backend:
+    uses: Deroino/docker-build-workflow/.github/workflows/reusable-docker-build.yaml@main
+    permissions:
+      contents: read
+      packages: write
+      pull-requests: write
+    with:
+      # Single platform build for AMD64 only
+      platforms: linux/amd64
+
+      # Backend specific configuration
+      dockerfile: docker/Dockerfile.backend
+      image-names: |
+        ghcr.io/${{ github.repository }}/backend
+
+      # Push to GHCR only (no Docker Hub)
+      dockerhub-enable: false
+      ghcr-enable: ${{ github.event_name != 'pull_request' }}
+
+      # Enable notifications
+      notify-enable: true
+
+    secrets:
+      # Notification credentials
+      notify-base-url: ${{ secrets.NOTIFY_BASE_URL }}
+      notify-token: ${{ secrets.NOTIFY_TOKEN }}
+
+  docker-build-frontend:
+    uses: Deroino/docker-build-workflow/.github/workflows/reusable-docker-build.yaml@main
+    permissions:
+      contents: read
+      packages: write
+      pull-requests: write
+    with:
+      # Single platform build for AMD64 only
+      platforms: linux/amd64
+
+      # Frontend specific configuration
+      dockerfile: docker/Dockerfile.frontend
+      image-names: |
+        ghcr.io/${{ github.repository }}/frontend
+
+      # Push to GHCR only (no Docker Hub)
+      dockerhub-enable: false
+      ghcr-enable: ${{ github.event_name != 'pull_request' }}
+
+      # Enable notifications
+      notify-enable: true
+
+    secrets:
+      # Notification credentials
+      notify-base-url: ${{ secrets.NOTIFY_BASE_URL }}
+      notify-token: ${{ secrets.NOTIFY_TOKEN }}
